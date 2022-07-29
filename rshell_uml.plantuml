@@ -1,0 +1,74 @@
+@startuml RShell
+
+Main -> RShell : user_input
+RShell -> Base : command
+
+class RShell{
+
+}
+
+class Base{
+    + Base()
+    + Base(command_input : string)
+    + {virtual} construct() : bool
+    + tokens: string[0...*]
+    + argument : const string
+    + command_input : string
+    + file_in, file_out : int, int
+}
+
+class Connect extends Base{
+    # left, right : Base*, Base*
+    + {virtual} construct() : bool
+    + precedence : string
+    + precedence_cmd : Connect[0...*]
+    + Connect()
+    + Connect(paren_str : string)
+}
+
+class And extends Connect{
+    + And(left, right : Base*, Base*)
+    + construct() : bool
+}
+
+class Or extends Connect{
+    + Or(left, right : Base*, Base*)
+    + construct() : bool
+}
+
+class Semicolon extends Connect{
+    + Semicolon(left, right : Base*, base*)
+    + construct() : bool
+}
+
+class Command extends Base{
+    + Command()
+    + construct() : bool
+}
+
+class Redirect extends Base{
+    # left, right : Base*, Base*
+    + Redirect(left, right, command : Base*, Base*, string)
+    + {virtual} construct() : bool
+}   
+
+class In extends Redirect{
+    + In(left, right, command : Base*, Base*, string)
+    + construct() : bool
+}
+
+class Out extends Redirect{
+    + Out(left, right, command : Base*, Base*, string)
+    + construct() : bool
+}
+
+class DoubleOut extends Redirect{
+    + DoubleOut(left, right, command : Base*, Base*, string)
+    + construct() : bool
+}
+
+class Piping extends Redirect{
+    + Piping(left, right, command : Base*, Base*, string)
+    + construct() : bool
+}
+@enduml
